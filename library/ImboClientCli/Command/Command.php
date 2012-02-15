@@ -82,7 +82,7 @@ class Command extends BaseCommand {
      * @see Symfony\Components\Console\Command\Command::initialize()
      */
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln('ImboClientCli-' . Version::getVersionNumber() . ' by Christer Edvartsen');
+        $output->writeln(Version::getVersionString());
 
         // Paths to look for the config
         $configPaths = $paths = array(

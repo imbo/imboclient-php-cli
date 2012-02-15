@@ -69,6 +69,6 @@ class Version {
      * @return string
      */
     static public function getVersionString() {
-        return 'imboclient' . self::getVersionNumber() . ' by Christer Edvartsen.' . PHP_EOL;
+        return 'ImboClientCli-' . self::getVersionNumber() . ' by Christer Edvartsen';
     }
 }
