@@ -1,0 +1,26 @@
+# Example configuration file
+#
+# Each server can have its own name (instead of server1, server2 and server3 as stated below).
+# Remember to update the default server if you change the server names. Servers can be disabled by
+# Changing the active state to "no". The client will refuse to run any operations against inactive
+# servers.
+
+servers:
+    default: server1
+    server1:
+        url: http://imbo1.example.com
+        publicKey: "public key"
+        privateKey: "private key"
+        active: yes
+
+    server2:
+        url: http://imbo2.example.com
+        publicKey: "public key"
+        privateKey: "private key"
+        active: yes
+
+    server3:
+        url: http://imbo3.example.com
+        publicKey: "public key"
+        privateKey: "private key"
+        active: no
