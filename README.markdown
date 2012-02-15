@@ -2,7 +2,7 @@
 This is a command line wrapper around the official [ImboClient](https://github.com/christeredvartsen/imboclient-php) client.
 
 ## Configuration file
-ImboClientCli requires a configuration file located in either `/etc/imboclientcli/config.yml` or `~/.imboclientcli/config.yml`. You may also specify a custom configuration file by using the `--config /path/to/config.yml` global option.
+ImboClientCli requires a configuration file located in either `/etc/imboclient/config.yml` or `~/.imboclient/config.yml`. You may also specify a custom configuration file by using the `--config /path/to/config.yml` global option.
 
 An example configuration file is included in the package.
 
