@@ -33,10 +33,7 @@ namespace ImboClientCli\Command;
 
 use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    ImboClient\Client as ImboClient,
-    InvalidArgumentException;
+    Symfony\Component\Console\Input\InputOption;
 
 /**
  * Command used to list configured imbo servers
