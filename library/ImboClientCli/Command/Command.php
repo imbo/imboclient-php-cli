@@ -49,7 +49,7 @@ use ImboClientCli\Version,
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/christeredvartsen/imboclient-php-cli
  */
-class Command extends BaseCommand {
+abstract class Command extends BaseCommand {
     /**
      * Application configuration
      */

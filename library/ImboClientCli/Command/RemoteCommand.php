@@ -31,16 +31,14 @@
 
 namespace ImboClientCli\Command;
 
-use ImboClient\Client as ImboClient,
+use Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    RuntimeException,
-    InvalidArgumentException;
+    InvalidArgumentException,
+    RuntimeException;
 
 /**
- * Command used to delete images from an imbo server
+ * Base command for other ImboClientCli commands
  *
  * @package Commands
  * @author Christer Edvartsen <cogo@starzinger.net>
@@ -48,46 +46,61 @@ use ImboClient\Client as ImboClient,
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/christeredvartsen/imboclient-php-cli
  */
-class DeleteImage extends RemoteCommand {
+abstract class RemoteCommand extends Command {
     /**
-     * Class constructor
+     * The name of the current server (value of the server option added below)
+     *
+     * @var string
      */
-    public function __construct() {
-        parent::__construct('delete-image');
+    protected $server;
 
-        $this->setDescription('Delete an image from imbo');
-        $this->setHelp('Delete an image from one of the imbo servers defined in the configuration');
-        $this->addArgument('imageIdentifier', InputArgument::REQUIRED, 'The identifier of the image to delete');
+    /**
+     * Add the "server" option to all remote commands
+     *
+     * @see Symfony\Components\Console\Command\Command::configure()
+     */
+    protected function configure() {
+        $this->addOption(
+            'server',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Which configured imbo server to add the image to. If not specified the default server will be used'
+        );
     }
 
     /**
-     * Execute the command
+     * Initialization method
      *
-     * @see Symfony\Components\Console\Command\Command::execute()
+     * This method is triggered before any commands will be executed. It will choose which server
+     * to run the command against based on the server option added to this class.
+     *
+     * The chosen server will be stored in the server attribute.
+     *
+     * @see Symfony\Components\Console\Command\Command::initialize()
      */
-    protected function execute(InputInterface $input, OutputInterface $output) {
-        $imageIdentifier = $input->getArgument('imageIdentifier');
+    protected function initialize(InputInterface $input, OutputInterface $output) {
+        parent::initialize($input, $output);
 
-        $dialog = $this->getHelper('dialog');
-        $result = $dialog->askConfirmation($output, 'Are you sure you want to delete an image from the "' . $this->server['name'] . '" server? [yN] ', false);
+        $servers = $this->configuration['servers'];
+        $default = isset($servers['default'])
+                 ? $servers['default']
+                 : '';
 
-        if ($result) {
-            $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
+        $server = $input->getOption('server');
 
-            try {
-                $response = $client->deleteImage($imageIdentifier);
-            } catch (RuntimeException $e) {
-                $output->writeln('An error occured. Could not complete the action.');
-                return;
-            }
-
-            if ($response->isSuccess()) {
-                $output->writeln('The image has been deleted from "' . $this->server['name'] . '".');
-            } else {
-                $output->writeln('The image was not removed. The response code from the server was: ' . $response->getStatusCode());
-            }
-        } else {
-            $output->writeln('Command aborted');
+        if (!$server) {
+            $server = $default;
         }
+
+        if (!$default) {
+            throw new RuntimeException('No default server is configured. Please set up a default server or specify which one to use with --server.');
+        }
+
+        if (empty($servers[$server]) || $servers[$server]['active'] !== 'yes') {
+            throw new InvalidArgumentException('No active server called "' . $server . '" exists in the configuration.');
+        }
+
+        $this->server = $servers[$server];
+        $this->server['name'] = $server;
     }
 }

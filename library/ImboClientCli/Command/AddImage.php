@@ -49,7 +49,7 @@ use ImboClient\Client as ImboClient,
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/christeredvartsen/imboclient-php-cli
  */
-class AddImage extends Command {
+class AddImage extends RemoteCommand {
     /**
      * Class constructor
      */
@@ -59,7 +59,6 @@ class AddImage extends Command {
         $this->setDescription('Add an image to imbo');
         $this->setHelp('Add an image to one of the imbo servers defined in the configuration');
         $this->addArgument('path', InputArgument::REQUIRED, 'Path to the image or a directory containing images');
-        $this->addOption('server', null, InputOption::VALUE_OPTIONAL, 'Which configured imbo server to add the image to. If not specified the default server will be used');
         $this->addOption('suffixes', null, InputOption::VALUE_OPTIONAL, 'Comma separated list of suffixes to include when specifying a directory as a path (case insensitive)', 'jpg,png,gif');
         $this->addOption('depth', null, InputOption::VALUE_OPTIONAL, 'Directory depth. -1 = enter all subdirectories, 0 = don\'t enter subdirectories, N = enter N subdirectories', -1);
     }
@@ -70,27 +69,6 @@ class AddImage extends Command {
      * @see Symfony\Components\Console\Command\Command::execute()
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $servers = $this->configuration['servers'];
-        $default = isset($servers['default'])
-                 ? $servers['default']
-                 : '';
-
-        $server = $input->getOption('server');
-
-        if (!$server) {
-            $server = $default;
-        }
-
-        if (!$default) {
-            throw new RuntimeException('No default server is configured. Please set up a default server or specify which one to use with --server.');
-        }
-
-        if (empty($servers[$server]) || $servers[$server]['active'] !== 'yes') {
-            throw new InvalidArgumentException('No active server called "' . $server . '" exists in the configuration.');
-        }
-
-        $imbo = $servers[$server];
-
         $path = $input->getArgument('path');
         $fullPath = realpath($path);
 
@@ -128,7 +106,7 @@ class AddImage extends Command {
         $result = $dialog->askConfirmation($output, 'You are about to add ' . count($files) . ' images to "' . $server . '". Continue? [yN] ', false);
 
         if ($result) {
-            $client = new ImboClient($imbo['url'], $imbo['publicKey'], $imbo['privateKey']);
+            $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
             $addedImages = 0;
 
             foreach ($files as $file) {
