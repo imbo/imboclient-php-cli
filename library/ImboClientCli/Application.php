@@ -55,6 +55,7 @@ class Application extends Console\Application {
         // Register commands
         $this->addCommands(array(
             new Command\AddImage(),
+            new Command\DeleteImage(),
             new Command\ListImboServers(),
         ));
 
