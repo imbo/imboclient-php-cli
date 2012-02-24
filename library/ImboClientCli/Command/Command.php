@@ -26,7 +26,7 @@
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
- * @link https://github.com/christeredvartsen/imboclient-php-cli
+ * @link https://github.com/imbo/imboclient-php-cli
  */
 
 namespace ImboClientCli\Command;
@@ -47,7 +47,7 @@ use ImboClientCli\Version,
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
- * @link https://github.com/christeredvartsen/imboclient-php-cli
+ * @link https://github.com/imbo/imboclient-php-cli
  */
 abstract class Command extends BaseCommand {
     /**
