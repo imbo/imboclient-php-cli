@@ -132,10 +132,14 @@ class AddImage extends Command {
             $addedImages = 0;
 
             foreach ($files as $file) {
-                $response = $client->addImage($file);
+                try {
+                    $response = $client->addImage($file);
 
-                if ($response->isSuccess()) {
-                    $addedImages++;
+                    if ($response->isSuccess()) {
+                        $addedImages++;
+                    }
+                } catch (RuntimeException $e) {
+                    // Just continue
                 }
             }
 
