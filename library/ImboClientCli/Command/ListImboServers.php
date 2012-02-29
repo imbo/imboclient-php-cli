@@ -75,7 +75,7 @@ class ListImboServers extends Command {
             $result = array(
                 'Name: ' . $server . ($server == $default ? ' (default)' : ''),
                 'URL: ' . $config['url'],
-                'Active: ' . $config['active'],
+                'Active: ' . ($config['active'] ? 'yes' : 'no'),
                 'Public key: ' . $config['publicKey'],
             );
 
