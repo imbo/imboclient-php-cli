@@ -22,54 +22,37 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  *
- * @package Core
+ * @package Unittests
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/imbo/imboclient-php-cli
  */
-
-namespace ImboClientCli;
-
-use ImboClientCli\Command,
-    Symfony\Component\Console;
 
 /**
- * Main application class
- *
- * @package Core
+ * @package Unittests
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/imbo/imboclient-php-cli
  */
-class Application extends Console\Application {
-    /**
-     * Class constructor
-     *
-     * Register all commands and set up some global options
-     */
-    public function __construct() {
-        parent::__construct('ImboClientCli', Version::getVersionNumber());
 
-        // Register commands
-        $this->addCommands(array(
-            new Command\Activate(),
-            new Command\AddImage(),
-            new Command\Deactivate(),
-            new Command\DeleteImage(),
-            new Command\NumImages(),
-            new Command\ListImboServers(),
-        ));
+set_include_path(
+    __DIR__ . '/../library' . PATH_SEPARATOR .
+    __DIR__ . PATH_SEPARATOR .
+    get_include_path()
+);
 
-        // Add global options
-        $this->getDefinition()->addOption(
-            new Console\Input\InputOption(
-                'config',
-                null,
-                Console\Input\InputOption::VALUE_OPTIONAL,
-                'Path to configuration file'
-            )
-        );
+// Autoloader for namespaced classes in the include_path
+spl_autoload_register(function($className) {
+    $filename = str_replace('\\', '/', $className) . '.php';
+
+    foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
+        $absPath = rtrim($path, '/') . '/' . $filename;
+
+        if (is_file($absPath)) {
+            require $absPath;
+            return true;
+        }
     }
-}
+});

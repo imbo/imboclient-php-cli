@@ -22,54 +22,60 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  *
- * @package Core
+ * @package Commands
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/imbo/imboclient-php-cli
  */
 
-namespace ImboClientCli;
+namespace ImboClientCli\Command;
 
-use ImboClientCli\Command,
-    Symfony\Component\Console;
+use ImboClient\Client as ImboClient,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    RuntimeException;
 
 /**
- * Main application class
+ * Command used to see if an image exist on an imbo server
  *
- * @package Core
+ * @package Commands
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/imbo/imboclient-php-cli
  */
-class Application extends Console\Application {
+class NumImages extends RemoteCommand {
     /**
      * Class constructor
-     *
-     * Register all commands and set up some global options
      */
     public function __construct() {
-        parent::__construct('ImboClientCli', Version::getVersionNumber());
+        parent::__construct('num-images');
 
-        // Register commands
-        $this->addCommands(array(
-            new Command\Activate(),
-            new Command\AddImage(),
-            new Command\Deactivate(),
-            new Command\DeleteImage(),
-            new Command\NumImages(),
-            new Command\ListImboServers(),
-        ));
+        $this->setDescription('Get the number of images on an imbo server');
+        $this->setHelp('Get the number of images on an imbo server');
+    }
 
-        // Add global options
-        $this->getDefinition()->addOption(
-            new Console\Input\InputOption(
-                'config',
-                null,
-                Console\Input\InputOption::VALUE_OPTIONAL,
-                'Path to configuration file'
-            )
-        );
+    /**
+     * Execute the command
+     *
+     * @see Symfony\Components\Console\Command\Command::execute()
+     */
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        set_include_path('/home/christer/dev/imboclient-php/library' . PATH_SEPARATOR . get_include_path());
+        $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
+
+        try {
+            $num = $client->getNumImages();
+        } catch (RuntimeException $e) {
+            $output->writeln('An error occured. Could not complete the action.');
+            return;
+        }
+
+        if ($num === false) {
+            $output->writeln($this->server['name'] . ' did not respond correctly.');
+        } else {
+            $output->writeln($this->server['name'] . ' has ' . $num . ' images.');
+        }
     }
 }
