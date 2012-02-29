@@ -11,16 +11,16 @@ servers:
         url: http://imbo1.example.com
         publicKey: "public key"
         privateKey: "private key"
-        active: yes
+        active: true
 
     server2:
         url: http://imbo2.example.com
         publicKey: "public key"
         privateKey: "private key"
-        active: yes
+        active: true
 
     server3:
         url: http://imbo3.example.com
         publicKey: "public key"
         privateKey: "private key"
-        active: no
+        active: false

@@ -52,8 +52,17 @@ use ImboClientCli\Version,
 abstract class Command extends BaseCommand {
     /**
      * Application configuration
+     *
+     * @var array
      */
     protected $configuration;
+
+    /**
+     * Path to the active configuration
+     *
+     * @var string
+     */
+    protected $configPath;
 
     /**
      * Set the configuration
@@ -121,16 +130,18 @@ abstract class Command extends BaseCommand {
             );
         }
 
+        $this->configPath = $fullPath;
+
         $parser = new Parser();
 
         try {
-            $this->configuration = $parser->parse(file_get_contents($fullPath));
+            $this->configuration = $parser->parse(file_get_contents($this->configPath));
         } catch (ParseException $e) {
             throw new InvalidArgumentException(
-                'Invalid configuration file: ' . $fullPath . ' (Parser message: ' . $e->getMessage() . ')'
+                'Invalid configuration file: ' . $this->configPath . ' (Parser message: ' . $e->getMessage() . ')'
             );
         }
 
-        $output->writeln('Configuration read from ' . $fullPath);
+        $output->writeln('Configuration read from ' . $this->configPath);
     }
 }
