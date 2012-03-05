@@ -96,7 +96,7 @@ abstract class RemoteCommand extends Command {
             throw new RuntimeException('No default server is configured. Please set up a default server or specify which one to use with --server.');
         }
 
-        if (empty($servers[$server]) || $servers[$server]['active'] !== 'yes') {
+        if (empty($servers[$server]) || $servers[$server]['active'] !== true) {
             throw new InvalidArgumentException('No active server called "' . $server . '" exists in the configuration.');
         }
 

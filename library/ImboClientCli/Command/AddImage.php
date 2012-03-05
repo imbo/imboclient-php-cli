@@ -103,7 +103,7 @@ class AddImage extends RemoteCommand {
         }
 
         $dialog = $this->getHelper('dialog');
-        $result = $dialog->askConfirmation($output, 'You are about to add ' . count($files) . ' images to "' . $server . '". Continue? [yN] ', false);
+        $result = $dialog->askConfirmation($output, 'You are about to add ' . count($files) . ' images to "' . $this->server['name'] . '". Continue? [yN] ', false);
 
         if ($result) {
             $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
@@ -121,7 +121,7 @@ class AddImage extends RemoteCommand {
                 }
             }
 
-            $output->writeln($addedImages . ' images added to "' . $server. '".');
+            $output->writeln($addedImages . ' images added to "' . $this->server['name']. '".');
         } else {
             $output->writeln('Command aborted');
         }
