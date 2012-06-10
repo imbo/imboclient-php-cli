@@ -15,12 +15,18 @@ ImboClientCli requires [PHP-5.3](http://php.net/) or above, and uses the followi
 these will be automatically handled by the PEAR installer when ImboClientCli is installed via PEAR.
 
 ## Configuration file
-ImboClientCli requires a configuration file located in either `/etc/imboclient/config.yml` or `~/.imboclient/config.yml`. You may also specify a custom configuration file by using the `--config /path/to/config.yml` global option.
+ImboClientCli requires a configuration file and will look for `config.yml` in the following directories (in the order specified), and will use the first it finds:
 
-An example configuration file is included in the package.
+* Current working directory
+* `~/.imboclient/config.yml`
+* `/etc/imboclient/config.yml`
+
+You may also specify a custom configuration file by using the `--config /path/to/config.yml` global option. By doing this the client will not look in any of the above directories (unless the file you specify does not exist).
+
+An [example configuration file](https://github.com/imbo/imboclient-php-cli/blob/master/config.yml.dist) is included in the package.
 
 ## Usage
-Simply run the executable and you will see something like this:
+Simply run the executable (`imboclient[.php]`) and you will see something like this:
 
 ![Screenshot](https://github.com/imbo/imboclient-php-cli/raw/master/screenshots/imboclientcli.png "Command executed without any options")
 
