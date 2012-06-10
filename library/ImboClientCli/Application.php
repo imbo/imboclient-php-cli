@@ -58,8 +58,9 @@ class Application extends Console\Application {
             new Command\AddImage(),
             new Command\Deactivate(),
             new Command\DeleteImage(),
-            new Command\NumImages(),
             new Command\ListImboServers(),
+            new Command\NumImages(),
+            new Command\ServerStatus(),
         ));
 
         // Add global options
