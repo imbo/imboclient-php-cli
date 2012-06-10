@@ -108,13 +108,19 @@ class AddImage extends RemoteCommand {
         if ($result) {
             $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
             $addedImages = 0;
+            $notAdded = array();
 
             foreach ($files as $file) {
                 try {
                     $response = $client->addImage($file);
 
                     if ($response->isSuccess()) {
+                        $output->writeln($file . ': ' . $response->getImageIdentifier());
                         $addedImages++;
+                    } else {
+                        $body = $response->asArray();
+
+                        $notAdded[] = $file . ' (' . $body['error']['message'] . ')';
                     }
                 } catch (RuntimeException $e) {
                     // Just continue
@@ -122,6 +128,11 @@ class AddImage extends RemoteCommand {
             }
 
             $output->writeln($addedImages . ' images added to "' . $this->server['name']. '".');
+
+            if ($num = count($notAdded)) {
+                $output->writeln($num . ' images was not added:');
+                $output->write($notAdded, true);
+            }
         } else {
             $output->writeln('Command aborted');
         }
