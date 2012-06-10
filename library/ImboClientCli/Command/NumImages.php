@@ -62,7 +62,6 @@ class NumImages extends RemoteCommand {
      * @see Symfony\Components\Console\Command\Command::execute()
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-        set_include_path('/home/christer/dev/imboclient-php/library' . PATH_SEPARATOR . get_include_path());
         $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
 
         try {
