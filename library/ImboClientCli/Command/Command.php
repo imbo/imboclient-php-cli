@@ -95,6 +95,7 @@ abstract class Command extends BaseCommand {
 
         // Paths to look for the config
         $configPaths = $paths = array(
+            getcwd() . '/config.yml',
             $_SERVER['HOME'] . '/.imboclient/config.yml',
             '/etc/imboclient/config.yml',
         );
@@ -103,11 +104,15 @@ abstract class Command extends BaseCommand {
 
         if ($config !== null) {
             $config = realpath($config);
-        }
 
-        if ($config && is_file($config)) {
-            // Prepend the config option
-            array_unshift($paths, $config);
+            if ($config && is_file($config)) {
+                // Prepend the config option
+                array_unshift($paths, $config);
+            } else {
+                throw new RuntimeException(
+                    '"' . $input->getOption('config') . '" is not a valid configuration file.'
+                );
+            }
         }
 
         $fullPath = null;
