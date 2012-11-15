@@ -1,5 +1,6 @@
 build
-docblox.xml
-phpmd.xml
 phpunit.xml
 config.yml
+composer.phar
+composer.lock
+vendor
