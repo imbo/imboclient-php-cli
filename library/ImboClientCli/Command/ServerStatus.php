@@ -22,55 +22,59 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  *
- * @package Core
+ * @package Commands
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/imbo/imboclient-php-cli
  */
 
-namespace ImboClientCli;
+namespace ImboClientCli\Command;
 
-use ImboClientCli\Command,
-    Symfony\Component\Console;
+use ImboClient\Client as ImboClient,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    RuntimeException;
 
 /**
- * Main application class
+ * Command used to check server status
  *
- * @package Core
+ * @package Commands
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/imbo/imboclient-php-cli
  */
-class Application extends Console\Application {
+class ServerStatus extends RemoteCommand {
     /**
      * Class constructor
-     *
-     * Register all commands and set up some global options
      */
     public function __construct() {
-        parent::__construct('ImboClientCli', Version::getVersionNumber());
+        parent::__construct('server-status');
 
-        // Register commands
-        $this->addCommands(array(
-            new Command\Activate(),
-            new Command\AddImage(),
-            new Command\Deactivate(),
-            new Command\DeleteImage(),
-            new Command\ListImboServers(),
-            new Command\NumImages(),
-            new Command\ServerStatus(),
-        ));
+        $this->setDescription('Check server status');
+        $this->setHelp('Check the current server status (database and storage status)');
+    }
 
-        // Add global options
-        $this->getDefinition()->addOption(
-            new Console\Input\InputOption(
-                'config',
-                null,
-                Console\Input\InputOption::VALUE_OPTIONAL,
-                'Path to configuration file'
-            )
-        );
+    /**
+     * Execute the command
+     *
+     * @see Symfony\Components\Console\Command\Command::execute()
+     */
+    protected function execute(InputInterface $input, OutputInterface $output) {
+        $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
+
+        try {
+            $status = $client->getServerStatus();
+        } catch (RuntimeException $e) {
+            $output->writeln('An error occured. Could not complete the action.');
+            return;
+        }
+
+        $output->write(array(
+            'Date: ' . $status['date'],
+            'Database: ' . ($status['database'] ? '<info>ok</info>' : '<error>error</error>'),
+            'Storage: ' . ($status['storage'] ? '<info>ok</info>' : '<error>error</error>'),
+        ), true);
     }
 }
