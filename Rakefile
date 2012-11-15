@@ -1,83 +1,125 @@
+require 'date'
+require 'digest/md5'
+require 'fileutils'
+require 'nokogiri'
+
 basedir = "."
-source  = "#{basedir}/library/ImboClientCli"
 build   = "#{basedir}/build"
+source  = "#{basedir}/library/ImboClientCli"
 logs    = "#{build}/logs"
 
-desc "Clean build dirs"
-task :clean do
-    system "rm -rf #{build}"
+desc "Task used by Jenkins-CI"
+task :jenkins => [:prepare, :lint, :composer, :test, :apidocs, :loc_ci, :cs_ci, :cpd_ci, :pmd_ci]
 
-    system "mkdir #{build}"
-    system "mkdir #{build}/coverage"
-    system "mkdir #{build}/docs"
-    system "mkdir #{build}/pdepend"
-    system "mkdir #{logs}"
+desc "Task used by Travis-CI"
+task :travis => [:composer, :test]
+
+desc "Default task"
+task :default => [:prepare, :lint, :composer, :test, :apidocs, :loc, :cs, :cpd, :pmd]
+
+desc "Clean up and create artifact directories"
+task :prepare do
+  FileUtils.rm_rf build
+  FileUtils.mkdir build
+
+  ["coverage", "logs", "docs"].each do |d|
+    FileUtils.mkdir "#{build}/#{d}"
+  end
 end
 
 desc "Check syntax on all php files in the project"
 task :lint do
-    `git ls-files "*.php"`.split("\n").each do |f|
-        begin
-            sh %{php -l #{f}}
-        rescue Exception
-            exit 1
-        end
+  `git ls-files "*.php"`.split("\n").each do |f|
+    begin
+      sh %{php -l #{f}}
+    rescue Exception
+      exit 1
     end
+  end
 end
 
-desc "Run unit tests using PHPUnit (configuration in phpunit.xml)"
+desc "Fetch or update composer.phar and update the dependencies"
+task :composer do
+  if ENV["TRAVIS"] == "true"
+    system "composer --no-ansi update --dev"
+  else
+    if File.exists?("composer.phar")
+      system "php -d \"apc.enable_cli=0\" composer.phar self-update"
+    else
+      system "curl -s http://getcomposer.org/installer | php -d \"apc.enable_cli=0\""
+    end
+
+    system "php -d \"apc.enable_cli=0\" composer.phar --no-ansi update --dev"
+  end
+end
+
+desc "Run tests"
 task :test do
-    system "phpunit"
+  if ENV["TRAVIS"] == "true"
+    puts "Opening phpunit.xml.dist"
+    document = Nokogiri::XML(File.open("phpunit.xml.dist"))
+    document.xpath("//phpunit/logging").remove
+
+    puts "Writing edited version of phpunit.xml"
+    File.open("phpunit.xml", "w+") do |f|
+        f.write(document.to_xml)
+    end
+  end
+
+  begin
+    if File.exists?("phpunit.xml")
+      sh %{phpunit --verbose -c phpunit.xml}
+    else
+      puts "Using phpunit.xml.dist"
+      sh %{phpunit --verbose -c phpunit.xml.dist}
+    end
+  rescue Exception
+    exit 1
+  end
 end
 
-desc "Generate API documentation using DocBlox (configuration in docblox.xml)"
-task :docs do
-    system "docblox"
+desc "Generate API documentation"
+task :apidocs do
+  system "phpdoc -d #{source} -t #{build}/docs"
 end
 
-desc "Generate phploc data"
-task :"phploc-ci" do
-    system "phploc --log-csv #{logs}/phploc.csv --log-xml #{logs}/phploc.xml #{source}"
+desc "Generate \"lines of code\" logs"
+task :loc do
+  system "phploc --log-csv #{logs}/phploc.csv --log-xml #{logs}/phploc.xml #{source}"
 end
 
-desc "Run phploc"
-task :phploc do
-    system "phploc #{source}"
+desc "Generate \"lines of code\""
+task :loc_ci do
+  system "phploc #{source}"
 end
 
-desc "Generate checkstyle.xml using PHP_CodeSniffer"
-task :"codesniffer-ci" do
-    system "phpcs --report=checkstyle --report-file=#{logs}/checkstyle.xml --standard=Imbo #{source}"
+desc "Check coding standard"
+task :cs do
+  system "phpcs --standard=Imbo #{source}"
 end
 
-desc "Check syntax with PHP_CodeSniffer"
-task :codesniffer do
-    system "phpcs --standard=Imbo #{source}"
+desc "Check coding standard and generate checkstyle logs"
+task :cs_ci do
+  system "phpcs --report=checkstyle --report-file=#{logs}/checkstyle.xml --standard=Imbo #{source}"
 end
 
-desc "Generate pmd-cpd.xml using PHPCPD"
-task :"cpd-ci" do
+desc "Run copy&paste detector"
+task :cpd do
+    system "phpcpd #{source}"
+end
+
+desc "Run copy&paste detector and generate logs"
+task :cpd_ci do
     system "phpcpd --log-pmd #{logs}/pmd-cpd.xml #{source}"
 end
 
-desc "Run PHPCPD"
-task :"cpd" do
-    system "phpcpd --log-pmd #{logs}/pmd-cpd.xml #{source}"
+desc "Run project mess detector"
+task :pmd do
+    system "phpmd #{source} text #{basedir}/phpmd.xml"
 end
 
-desc "Generate jdepend.xml and software metrics charts using PHP_Depend"
-task :"pdepend-ci" do
-    system "pdepend --jdepend-xml=#{logs}/jdepend.xml --jdepend-chart=#{build}/pdepend/dependencies.svg --overview-pyramid=#{build}/pdepend/overview-pyramid.svg #{source}"
-end
-
-desc "Generate pmd.xml and pmd.html using PHPMD (configuration in phpmd.xml)"
-task :"pmd-ci" do
+desc "Run project mess detector and generate XML and HTML logs"
+task :pmd_ci do
     system "phpmd #{source} xml #{basedir}/phpmd.xml --reportfile #{logs}/pmd.xml"
     system "phpmd #{source} html #{basedir}/phpmd.xml --reportfile #{logs}/pmd.html"
 end
-
-desc "Continuous integration task"
-task :ci => [:clean, :test, :docs, :"phploc-ci", :"codesniffer-ci", :"cpd-ci", :"pdepend-ci", :"pmd-ci"]
-
-desc "Default task"
-task :default => [:clean, :lint, :test, :docs, :phploc, :codesniffer, :cpd]
