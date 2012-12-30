@@ -32,26 +32,8 @@
 
 namespace ImboClientCli;
 
-// Register audoloader
-spl_autoload_register(function($className) {
-    $filename = str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
-
-    foreach (explode(PATH_SEPARATOR, get_include_path()) as $path) {
-        $absPath = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
-
-        if (is_file($absPath)) {
-            require $absPath;
-            return true;
-        }
-    }
-
-    return false;
-});
-
-// Use local directory if the package is not installed via PEAR
-if (strpos('@php_bin@', '@php_bin') === 0) {
-    set_include_path(__DIR__ . DIRECTORY_SEPARATOR . 'library' . PATH_SEPARATOR . get_include_path());
-}
+// Autoloader
+require __DIR__ . '/vendor/autoload.php';
 
 // Run the main application
 $application = new Application();

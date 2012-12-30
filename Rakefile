@@ -56,25 +56,17 @@ end
 desc "Run tests"
 task :test do
   if ENV["TRAVIS"] == "true"
-    puts "Opening phpunit.xml.dist"
-    document = Nokogiri::XML(File.open("phpunit.xml.dist"))
-    document.xpath("//phpunit/logging").remove
-
-    puts "Writing edited version of phpunit.xml"
-    File.open("phpunit.xml", "w+") do |f|
-        f.write(document.to_xml)
+    begin
+      sh %{vendor/bin/phpunit --verbose -c phpunit.xml.travis}
+    rescue Exception
+      exit 1
     end
-  end
-
-  begin
-    if File.exists?("phpunit.xml")
-      sh %{phpunit --verbose -c phpunit.xml}
-    else
-      puts "Using phpunit.xml.dist"
-      sh %{phpunit --verbose -c phpunit.xml.dist}
+  else
+    begin
+      sh %{vendor/bin/phpunit --verbose}
+    rescue Exception
+      exit 1
     end
-  rescue Exception
-    exit 1
   end
 end
 

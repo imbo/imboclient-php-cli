@@ -2,5 +2,4 @@ build
 phpunit.xml
 config.yml
 composer.phar
-composer.lock
 vendor

@@ -1,12 +1,14 @@
 # ImboClientCli - A command line client for Imbo
-This is a command line wrapper around the official [ImboClient](https://github.com/imbo/imboclient-php) client.
+This is a command line wrapper around the official [PHP-based Imbo client](https://github.com/imbo/imboclient-php).
 
 ## Installation
-Install using [Composer](http://getcomposer.org):
+Clone the repository, and install dependencies using [Composer](http://getcomposer.org/):
 
 ```
+git clone https://github.com/imbo/imboclient-php-cli.git
+cd imboclient-php-cli
 curl -s https://getcomposer.org/installer | php
-php composer.phar create-project imbo/imboclient [<dir>] [<version>]
+php composer.phar install
 ```
 
 ### Requirements
