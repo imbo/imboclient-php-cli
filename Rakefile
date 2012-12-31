@@ -9,13 +9,13 @@ source  = "#{basedir}/library/ImboClientCli"
 logs    = "#{build}/logs"
 
 desc "Task used by Jenkins-CI"
-task :jenkins => [:prepare, :lint, :composer, :test, :apidocs, :loc_ci, :cs_ci, :cpd_ci, :pmd_ci]
+task :jenkins => [:prepare, :lint, :installdep, :test, :apidocs, :loc_ci, :cs_ci, :cpd_ci, :pmd_ci]
 
 desc "Task used by Travis-CI"
-task :travis => [:composer, :test]
+task :travis => [:installdep, :test]
 
 desc "Default task"
-task :default => [:prepare, :lint, :composer, :test, :apidocs, :loc, :cs, :cpd, :pmd]
+task :default => [:prepare, :lint, :installdep, :test, :apidocs, :loc, :cs, :cpd, :pmd]
 
 desc "Clean up and create artifact directories"
 task :prepare do
@@ -38,18 +38,28 @@ task :lint do
   end
 end
 
-desc "Fetch or update composer.phar and update the dependencies"
-task :composer do
+desc "Install dependencies"
+task :installdep do
   if ENV["TRAVIS"] == "true"
-    system "composer --no-ansi update --dev"
+    system "composer --no-ansi install --dev"
   else
-    if File.exists?("composer.phar")
-      system "php -d \"apc.enable_cli=0\" composer.phar self-update"
-    else
-      system "curl -s http://getcomposer.org/installer | php -d \"apc.enable_cli=0\""
-    end
+    Rake::Task["install_composer"].invoke
+    system "php -d \"apc.enable_cli=0\" composer.phar install --dev"
+  end
+end
 
-    system "php -d \"apc.enable_cli=0\" composer.phar --no-ansi update --dev"
+desc "Update dependencies"
+task :updatedep do
+  Rake::Task["install_composer"].invoke
+  system "php -d \"apc.enable_cli=0\" composer.phar update --dev"
+end
+
+desc "Install/update composer itself"
+task :install_composer do
+  if File.exists?("composer.phar")
+    system "php -d \"apc.enable_cli=0\" composer.phar self-update"
+  else
+    system "curl -s http://getcomposer.org/installer | php -d \"apc.enable_cli=0\""
   end
 end
 
