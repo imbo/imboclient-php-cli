@@ -2,7 +2,7 @@
 /**
  * ImboClientCli
  *
- * Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
+ * Copyright (c) 2011-2013, Christer Edvartsen <cogo@starzinger.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -24,7 +24,7 @@
  *
  * @package Commands
  * @author Christer Edvartsen <cogo@starzinger.net>
- * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
+ * @copyright Copyright (c) 2011-2013, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/imbo/imboclient-php-cli
  */
@@ -41,7 +41,7 @@ use ImboClient\Client as ImboClient,
  *
  * @package Commands
  * @author Christer Edvartsen <cogo@starzinger.net>
- * @copyright Copyright (c) 2011-2012, Christer Edvartsen <cogo@starzinger.net>
+ * @copyright Copyright (c) 2011-2013, Christer Edvartsen <cogo@starzinger.net>
  * @license http://www.opensource.org/licenses/mit-license MIT License
  * @link https://github.com/imbo/imboclient-php-cli
  */
