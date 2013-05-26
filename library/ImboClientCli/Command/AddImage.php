@@ -123,7 +123,7 @@ class AddImage extends RemoteCommand {
                         $notAdded[] = $file . ' (' . $body['error']['message'] . ')';
                     }
                 } catch (RuntimeException $e) {
-                    // Just continue
+                    $notAdded[] = $file . ' (' . $e->getMessage() . ')';
                 }
             }
 
