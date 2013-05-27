@@ -1,5 +1,4 @@
 build
-phpunit.xml
 config.yml
 composer.phar
 vendor

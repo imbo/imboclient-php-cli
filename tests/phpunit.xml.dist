@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="false" bootstrap="./bootstrap.php">
+  <testsuites>
+    <testsuite name="ImboClientCli test suite">
+      <directory>./ImboClientCli</directory>
+    </testsuite>
+  </testsuites>
+
+  <filter>
+    <whitelist addUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">../library/ImboClientCli</directory>
+    </whitelist>
+  </filter>
+</phpunit>

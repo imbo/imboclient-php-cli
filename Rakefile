@@ -41,6 +41,7 @@ end
 desc "Install dependencies"
 task :installdep do
   if ENV["TRAVIS"] == "true"
+    system "composer self-update"
     system "composer --no-ansi install --dev"
   else
     Rake::Task["install_composer"].invoke
@@ -67,13 +68,13 @@ desc "Run tests"
 task :test do
   if ENV["TRAVIS"] == "true"
     begin
-      sh %{vendor/bin/phpunit --verbose -c phpunit.xml.travis}
+      sh %{vendor/bin/phpunit --verbose -c tests/phpunit.xml.travis}
     rescue Exception
       exit 1
     end
   else
     begin
-      sh %{vendor/bin/phpunit --verbose}
+      sh %{vendor/bin/phpunit --verbose -c tests --coverage-html build/coverage --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml}
     rescue Exception
       exit 1
     end
