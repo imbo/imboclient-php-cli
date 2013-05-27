@@ -9,13 +9,13 @@ source  = "#{basedir}/library/ImboClientCli"
 logs    = "#{build}/logs"
 
 desc "Task used by Jenkins-CI"
-task :jenkins => [:prepare, :lint, :installdep, :test, :apidocs, :loc_ci, :cs_ci, :cpd_ci, :pmd_ci]
+task :jenkins => [:prepare, :lint, :installdep, :test, :apidocs, :cs_ci]
 
 desc "Task used by Travis-CI"
 task :travis => [:installdep, :test]
 
 desc "Default task"
-task :default => [:prepare, :lint, :installdep, :test, :apidocs, :loc, :cs, :cpd, :pmd]
+task :default => [:prepare, :lint, :installdep, :test, :apidocs, :cs]
 
 desc "Clean up and create artifact directories"
 task :prepare do
@@ -83,17 +83,7 @@ end
 
 desc "Generate API documentation"
 task :apidocs do
-  system "phpdoc -d #{source} -t #{build}/docs"
-end
-
-desc "Generate \"lines of code\" logs"
-task :loc do
-  system "phploc --log-csv #{logs}/phploc.csv --log-xml #{logs}/phploc.xml #{source}"
-end
-
-desc "Generate \"lines of code\""
-task :loc_ci do
-  system "phploc #{source}"
+  system "phpdoc -d #{source} -t #{build}/docs --title 'API documentation for ImboClientCli'"
 end
 
 desc "Check coding standard"
@@ -104,25 +94,4 @@ end
 desc "Check coding standard and generate checkstyle logs"
 task :cs_ci do
   system "phpcs --report=checkstyle --report-file=#{logs}/checkstyle.xml --standard=Imbo #{source}"
-end
-
-desc "Run copy&paste detector"
-task :cpd do
-    system "phpcpd #{source}"
-end
-
-desc "Run copy&paste detector and generate logs"
-task :cpd_ci do
-    system "phpcpd --log-pmd #{logs}/pmd-cpd.xml #{source}"
-end
-
-desc "Run project mess detector"
-task :pmd do
-    system "phpmd #{source} text #{basedir}/phpmd.xml"
-end
-
-desc "Run project mess detector and generate XML and HTML logs"
-task :pmd_ci do
-    system "phpmd #{source} xml #{basedir}/phpmd.xml --reportfile #{logs}/pmd.xml"
-    system "phpmd #{source} html #{basedir}/phpmd.xml --reportfile #{logs}/pmd.html"
 end
