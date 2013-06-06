@@ -16,6 +16,7 @@
     "php": ">=5.3.2",
     "symfony/console": "2.2.*",
     "symfony/finder": "2.2.*",
+    "symfony/yaml": "2.3.*",
     "imbo/imboclient": "0.8.*"
   },
   "require-dev": {
