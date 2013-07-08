@@ -52,7 +52,9 @@ class AddImage extends RemoteCommand {
             throw new InvalidArgumentException('The specified path does not exist: ' . $path);
         }
 
-        if (is_file($fullPath)) {
+        $singleFile = is_file($fullPath);
+
+        if ($singleFile) {
             $files = array($fullPath);
         } else {
             $suffixes = $input->getOption('suffixes');
@@ -79,11 +81,7 @@ class AddImage extends RemoteCommand {
         }
 
         $dialog = $this->getHelper('dialog');
-        $result = true;
-
-        if (count($files) > 5) {
-            $result = $dialog->askConfirmation($output, 'You are about to add ' . count($files) . ' images to "' . $this->server['name'] . '". Continue? [yN] ', false);
-        }
+        $result = $singleFile ?: $dialog->askConfirmation($output, 'You are about to add ' . count($files) . ' images to "' . $this->server['name'] . '". Continue? [yN] ', false);
 
         if ($result) {
             $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
