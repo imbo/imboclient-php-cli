@@ -90,9 +90,11 @@ class AddImage extends RemoteCommand {
                 try {
                     $response = $client->addImage($file);
 
-                    if ($response->isSuccess()) {
+                    if ($response->isSuccess() && $response->getImageIdentifier()) {
                         $output->writeln($file . ': ' . $response->getImageIdentifier());
                         $addedImages++;
+                    } else if (!$response->getImageIdentifier()) {
+                        $notAdded[] = $file . ' (Server did not return an identifier)';
                     } else {
                         $body = $response->asArray();
 
