@@ -6,7 +6,7 @@ require 'json'
 
 basedir = "."
 build   = "#{basedir}/build"
-source  = "#{basedir}/library/ImboClientCli"
+source  = "#{basedir}/src/ImboClientCli"
 logs    = "#{build}/logs"
 
 desc "Task used by Jenkins-CI"
