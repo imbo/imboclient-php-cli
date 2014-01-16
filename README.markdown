@@ -12,7 +12,7 @@ php composer.phar install
 ```
 
 ### Requirements
-ImboClientCli requires [PHP-5.3.2](http://php.net/) or above.
+ImboClientCli requires [PHP-5.4](http://php.net/) or above.
 
 ## Configuration file
 ImboClientCli requires a configuration file and will look for `config.yml` in the following directories (in the order specified), and will use the first it finds:
