@@ -10,6 +10,8 @@ notifications:
 branches:
   only:
     - master
-before_script:
-  - "gem install nokogiri"
-script: rake travis
+    - develop
+script:
+  - composer self-update
+  - composer --no-ansi install --dev
+  - ./vendor/bin/phpunit --verbose -c tests/phpunit.xml.travis
