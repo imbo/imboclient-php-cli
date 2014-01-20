@@ -10,45 +10,19 @@
 
 namespace ImboClientCliTest\Command;
 
-
-use ImboClientCli\Command\ServerStatus,
-    ImboClientCli\Application,
-    Symfony\Component\Console\Tester\CommandTester;
+use ImboClientCli\Command\ServerStatus;
 
 /**
  * @package Test suite
  * @author Christer Edvartsen <cogo@starzinger.net>
  * @covers ImboClientCli\Command\ServerStatus
  */
-class ServerStatusTest extends \PHPUnit_Framework_TestCase {
+class ServerStatusTest extends RemoteCommandTests {
     /**
-     * @var ServerStatus
+     * @return ServerStatus
      */
-    private $command;
-
-    /**
-     * @var ImboClient\ImboClient
-     */
-    private $client;
-
-    /**
-     * Set up the command
-     */
-    public function setUp() {
-        $this->client = $this->getMockBuilder('ImboClient\ImboClient')
-                             ->disableOriginalConstructor()
-                             ->getMock();
-
-        $this->command = new ServerStatus();
-        $this->command->setClient($this->client);
-    }
-
-    /**
-     * Tear down the command
-     */
-    public function tearDown() {
-        $this->command = null;
-        $this->client = null;
+    protected function getCommand() {
+        return new ServerStatus();
     }
 
     /**
@@ -81,9 +55,6 @@ class ServerStatusTest extends \PHPUnit_Framework_TestCase {
      * @dataProvider getStatuses
      */
     public function testCanFetchStatus($databaseStatus, $storageStatus, array $contains) {
-        $application = new Application();
-        $application->add($this->command);
-
         $datetime = $this->getMock('DateTime');
         $datetime->expects($this->once())->method('format')->with('r')->will($this->returnValue('formatted date'));
 
@@ -93,15 +64,7 @@ class ServerStatusTest extends \PHPUnit_Framework_TestCase {
             'storage' => $storageStatus,
         )));
 
-        $command = $application->find('server-status');
-
-        $tester = new CommandTester($command);
-        $tester->execute(array(
-            'command' => $command->getName(),
-            '--config' => __DIR__ . '/../../test-config.yml',
-        ));
-
-        $display = $tester->getDisplay();
+        $display = $this->executeCommand();
 
         foreach ($contains as $line) {
             $this->assertContains($line, $display);
