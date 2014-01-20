@@ -38,7 +38,6 @@ class ServerStatus extends RemoteCommand {
     protected function execute(InputInterface $input, OutputInterface $output) {
         $status = $this->getClient()->getServerStatus();
         $output->write(array(
-            'Server status from <info>' . $this->server['url'] . '</info>:',
             'Date on the server: <info>' . $status['date']->format('r') . '</info>',
             'Database: ' . ($status['database'] ? '<info>ok</info>' : '<error>error</error>'),
             'Storage: ' . ($status['storage'] ? '<info>ok</info>' : '<error>error</error>'),
