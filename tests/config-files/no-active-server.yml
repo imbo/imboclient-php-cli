@@ -1,0 +1,14 @@
+servers:
+    default: local
+
+    local:
+        url: http://imbo
+        publicKey: user
+        privateKey: key
+        active: false
+
+    remote:
+        url: http://imbo.starzinger.net
+        publicKey: remoteuser
+        privateKey: key
+        active: false

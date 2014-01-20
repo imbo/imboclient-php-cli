@@ -52,10 +52,16 @@ abstract class RemoteCommandTests extends \PHPUnit_Framework_TestCase {
         $command = $application->find($this->command->getName());
 
         $tester = new CommandTester($command);
-        $tester->execute(array_merge($options, array(
-            'command' => $command->getName(),
-            '--config' => __DIR__ . '/../../test-config.yml',
-        )));
+        $tester->execute(array_merge(
+            // Default configuration file
+            array('--config' => __DIR__ . '/../../config-files/config.yml'),
+
+            // Custom options
+            $options,
+
+            // Command name is not overridable
+            array('command' => $command->getName())
+        ));
 
         return $tester->getDisplay();
     }

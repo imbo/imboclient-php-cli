@@ -14,8 +14,7 @@ use ImboClient\ImboClient,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
-    InvalidArgumentException,
-    RuntimeException;
+    InvalidArgumentException;
 
 /**
  * Base command for other ImboClientCli commands
@@ -85,7 +84,7 @@ abstract class RemoteCommand extends Command {
         }
 
         if (!$default) {
-            throw new RuntimeException('No default server is configured. Please set up a default server or specify which one to use with --server.');
+            throw new InvalidArgumentException('No default server is configured. Please set up a default server or specify which one to use with --server.');
         }
 
         if (empty($servers[$server]) || $servers[$server]['active'] !== true) {
