@@ -94,6 +94,8 @@ abstract class RemoteCommand extends Command {
 
         $this->server = $servers[$server];
         $this->server['name'] = $server;
+
+        $output->write(array('Remote command on <info>' . $this->server['url'] . '</info>: ', ''), true);
     }
 
     /**
