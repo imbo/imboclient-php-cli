@@ -103,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/imbo/imboclient-php.git",
-                "reference": "d5cef4eb2380413fb41028c43cb82d94ebbde91d"
+                "reference": "3c7f8af3f96cc7e69b2d00d4fc00e642d5a08fbb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/imbo/imboclient-php/zipball/d5cef4eb2380413fb41028c43cb82d94ebbde91d",
-                "reference": "d5cef4eb2380413fb41028c43cb82d94ebbde91d",
+                "url": "https://api.github.com/repos/imbo/imboclient-php/zipball/3c7f8af3f96cc7e69b2d00d4fc00e642d5a08fbb",
+                "reference": "3c7f8af3f96cc7e69b2d00d4fc00e642d5a08fbb",
                 "shasum": ""
             },
             "require": {
@@ -150,7 +150,7 @@
                 "image storage",
                 "image transformation"
             ],
-            "time": "2014-01-16 07:41:20"
+            "time": "2014-01-20 18:40:30"
         },
         {
             "name": "symfony/console",
