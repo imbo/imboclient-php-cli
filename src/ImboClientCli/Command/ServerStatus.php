@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Imbo package
+ * This file is part of the ImboClientCli package
  *
  * (c) Christer Edvartsen <cogo@starzinger.net>
  *
@@ -10,10 +10,8 @@
 
 namespace ImboClientCli\Command;
 
-use ImboClient\Client as ImboClient,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    RuntimeException;
+use Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command used to check server status
@@ -38,17 +36,10 @@ class ServerStatus extends RemoteCommand {
      * @see Symfony\Components\Console\Command\Command::execute()
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
-
-        try {
-            $status = $client->getServerStatus();
-        } catch (RuntimeException $e) {
-            $output->writeln('An error occured. Could not complete the action.');
-            return;
-        }
-
+        $status = $this->getClient()->getServerStatus();
         $output->write(array(
-            'Date: ' . $status['date'],
+            'Server status from <info>' . $this->server['url'] . '</info>:',
+            'Date on the server: <info>' . $status['date']->format('r') . '</info>',
             'Database: ' . ($status['database'] ? '<info>ok</info>' : '<error>error</error>'),
             'Storage: ' . ($status['storage'] ? '<info>ok</info>' : '<error>error</error>'),
         ), true);
