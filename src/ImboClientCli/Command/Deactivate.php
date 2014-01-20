@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Imbo package
+ * This file is part of the ImboClientCli package
  *
  * (c) Christer Edvartsen <cogo@starzinger.net>
  *
