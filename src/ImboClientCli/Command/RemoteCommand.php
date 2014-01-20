@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Imbo package
+ * This file is part of the ImboClientCli package
  *
  * (c) Christer Edvartsen <cogo@starzinger.net>
  *
@@ -10,7 +10,8 @@
 
 namespace ImboClientCli\Command;
 
-use Symfony\Component\Console\Input\InputOption,
+use ImboClient\ImboClient,
+    Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     InvalidArgumentException,
@@ -24,11 +25,26 @@ use Symfony\Component\Console\Input\InputOption,
  */
 abstract class RemoteCommand extends Command {
     /**
-     * The name of the current server (value of the server option added below)
+     * Information regarding the current server
      *
-     * @var string
+     * Elements included in this array are:
+     *
+     * (string) url The URL to the server
+     * (string) publicKey The public key of the user performing the command
+     * (string) privateKey The private key of the user performing the command
+     * (boolean) active Whether or not the server is activated in the configuration
+     * (string) name The name of the server in the configuration
+     *
+     * @var array
      */
     protected $server;
+
+    /**
+     * ImboClient instance used to perform remote operations
+     *
+     * @var ImboClient
+     */
+    protected $client;
 
     /**
      * Add the "server" option to all remote commands
@@ -78,5 +94,31 @@ abstract class RemoteCommand extends Command {
 
         $this->server = $servers[$server];
         $this->server['name'] = $server;
+    }
+
+    /**
+     * Get an instance of the ImboClient
+     *
+     * @return ImboClient
+     */
+    public function getclient() {
+        if ($this->client === null) {
+            $this->setClient(ImboClient::factory(array(
+                'serverUrls' => array($this->server['url']),
+                'publicKey' => $this->server['publicKey'],
+                'privateKey' => $this->server['privateKey'],
+            )));
+        }
+
+        return $this->client;
+    }
+
+    /**
+     * Set the ImboClient instance
+     *
+     * @param ImboClient $client An instance of the client
+     */
+    public function setClient(ImboClient $client) {
+        $this->client = $client;
     }
 }
