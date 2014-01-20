@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Imbo package
+ * This file is part of the ImboClientCli package
  *
  * (c) Christer Edvartsen <cogo@starzinger.net>
  *
@@ -26,7 +26,7 @@ class Application extends Console\Application {
      * Register all commands and set up some global options
      */
     public function __construct() {
-        parent::__construct('ImboClientCli', Version::getVersionNumber());
+        parent::__construct('ImboClientCli', Version::VERSION);
 
         // Register commands
         $this->addCommands(array(
