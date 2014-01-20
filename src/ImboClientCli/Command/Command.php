@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the Imbo package
+ * This file is part of the ImboClientCli package
  *
  * (c) Christer Edvartsen <cogo@starzinger.net>
  *
@@ -67,8 +67,6 @@ abstract class Command extends BaseCommand {
      * @see Symfony\Components\Console\Command\Command::initialize()
      */
     protected function initialize(InputInterface $input, OutputInterface $output) {
-        $output->writeln(Version::getVersionString());
-
         // Paths to look for the config
         $configPaths = $paths = array(
             getcwd() . '/config.yml',
@@ -123,6 +121,9 @@ abstract class Command extends BaseCommand {
             );
         }
 
-        $output->writeln('Configuration read from ' . $this->configPath);
+        $output->write(array(
+            'Configuration read from <info>' . $this->configPath . '</info>',
+            '',
+        ), true);
     }
 }
