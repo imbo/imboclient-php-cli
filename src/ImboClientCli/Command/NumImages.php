@@ -38,19 +38,7 @@ class NumImages extends RemoteCommand {
      * @see Symfony\Components\Console\Command\Command::execute()
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
-
-        try {
-            $num = $client->getNumImages();
-        } catch (RuntimeException $e) {
-            $output->writeln('An error occured. Could not complete the action.');
-            return;
-        }
-
-        if ($num === false) {
-            $output->writeln($this->server['name'] . ' did not respond correctly.');
-        } else {
-            $output->writeln($this->server['name'] . ' has ' . $num . ' images.');
-        }
+        $num = $this->getClient()->getNumImages();
+        $output->writeln('<info>' . $this->server['publicKey'] . '</info> has <info>' . $num . '</info> image' . ($num !== 1 ? 's' : '') . '.');
     }
 }
