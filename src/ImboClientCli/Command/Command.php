@@ -77,9 +77,7 @@ abstract class Command extends BaseCommand {
         $config = $input->getOption('config');
 
         if ($config !== null) {
-            $config = realpath($config);
-
-            if ($config && is_file($config)) {
+            if (is_file($config)) {
                 // Prepend the config option
                 array_unshift($paths, $config);
             } else {
