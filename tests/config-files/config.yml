@@ -8,7 +8,7 @@ servers:
         active: true
 
     remote:
-        url: http://imbo.starzinger.net
+        url: http://imbo-remote
         publicKey: remoteuser
-        privateKey: key
+        privateKey: otherkey
         active: false

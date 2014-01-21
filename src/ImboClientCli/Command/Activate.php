@@ -43,11 +43,13 @@ class Activate extends Command {
         $server = $input->getArgument('server');
 
         if (!isset($this->configuration['servers'][$server])) {
-            throw new InvalidArgumentException('There is no server named ' . $server . ' in the configuration file.');
+            $output->writeln('<error>There is no server named ' . $server . ' in the configuration file.</error>');
+            return 1;
         }
 
         if ($this->configuration['servers'][$server]['active']) {
-            throw new InvalidArgumentException('The server is already activated.');
+            $output->writeln('<error>The server is already activated.</error>');
+            return 1;
         }
 
         // Activate the server
@@ -57,7 +59,8 @@ class Activate extends Command {
         $yaml = $dumper->dump($this->configuration, 2);
 
         if (!file_put_contents($this->configPath, $yaml)) {
-            $output->writeln('An error occured. The configuration file was not updated.');
+            $output->writeln('<error>An error occured. The configuration file was not updated.</error>');
+            return 1;
         } else {
             $output->writeln('The configuration file has been updated.');
         }

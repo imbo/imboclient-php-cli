@@ -34,7 +34,7 @@ class Application extends Console\Application {
             new Command\AddImage(),
             new Command\Deactivate(),
             new Command\DeleteImage(),
-            new Command\ListImboServers(),
+            new Command\ListServers(),
             new Command\NumImages(),
             new Command\ServerStatus(),
         ));

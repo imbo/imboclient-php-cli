@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\InputInterface,
  * @package Commands
  * @author Christer Edvartsen <cogo@starzinger.net>
  */
-class ListImboServers extends Command {
+class ListServers extends Command {
     /**
      * Class constructor
      */

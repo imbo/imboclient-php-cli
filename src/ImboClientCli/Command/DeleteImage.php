@@ -10,13 +10,11 @@
 
 namespace ImboClientCli\Command;
 
-use ImboClient\Client as ImboClient,
+use ImboClient\ImboClient,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    RuntimeException,
-    InvalidArgumentException;
+    Guzzle\Common\Exception\GuzzleException;
 
 /**
  * Command used to delete images from an imbo server
@@ -45,22 +43,21 @@ class DeleteImage extends RemoteCommand {
         $imageIdentifier = $input->getArgument('imageIdentifier');
 
         $dialog = $this->getHelper('dialog');
-        $result = $dialog->askConfirmation($output, 'Are you sure you want to delete an image from the "' . $this->server['name'] . '" server? [yN] ', false);
+        $result = $dialog->askConfirmation($output, 'Are you sure you want to delete an image from <info>' . $this->server['url'] . '</info>? [yN] ', false);
 
         if ($result) {
-            $client = new ImboClient($this->server['url'], $this->server['publicKey'], $this->server['privateKey']);
-
             try {
-                $response = $client->deleteImage($imageIdentifier);
-            } catch (RuntimeException $e) {
-                $output->writeln('An error occured. Could not complete the action.');
-                return;
+                $response = $this->getClient()->deleteImage($imageIdentifier);
+            } catch (GuzzleException $e) {
+                $output->writeln('<error>An error occured. Could not delete the image: ' . $e->getMessage() . '</error>');
+                return 1;
             }
 
-            if ($response->isSuccess()) {
-                $output->writeln('The image has been deleted from "' . $this->server['name'] . '".');
+            if ($response['status'] === 200) {
+                $output->writeln('The image has been deleted from <info>' . $this->server['url'] . '</info>.');
             } else {
-                $output->writeln('The image was not removed. The response code from the server was: ' . $response->getStatusCode());
+                $output->writeln('The image was not deleted. The response code from the server was: <info>' . $response['status'] . '</info>.');
+                return 1;
             }
         } else {
             $output->writeln('Command aborted');

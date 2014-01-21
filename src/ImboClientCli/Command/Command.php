@@ -83,7 +83,7 @@ abstract class Command extends BaseCommand {
                 // Prepend the config option
                 array_unshift($paths, $config);
             } else {
-                throw new RuntimeException(
+                throw new InvalidArgumentException(
                     '"' . $input->getOption('config') . '" is not a valid configuration file.'
                 );
             }
