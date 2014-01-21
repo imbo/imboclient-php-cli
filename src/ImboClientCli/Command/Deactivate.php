@@ -58,7 +58,7 @@ class Deactivate extends Command {
         $dumper = new Dumper();
         $yaml = $dumper->dump($this->configuration, 2);
 
-        if (!file_put_contents($this->configPath, $yaml)) {
+        if (!@file_put_contents($this->configPath, $yaml)) {
             $output->writeln('<error>An error occured. The configuration file was not updated.</error>');
             return 1;
         } else {
