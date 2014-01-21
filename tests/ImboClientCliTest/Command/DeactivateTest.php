@@ -10,7 +10,8 @@
 
 namespace ImboClientCliTest\Command;
 
-use ImboClientCli\Command\Deactivate;
+use ImboClientCli\Command\Deactivate,
+    org\bovigo\vfs\vfsStream;
 
 /**
  * @package Test suite
@@ -35,5 +36,37 @@ class DeactivateTest extends CommandTests {
         $this->assertContains('The server is already deactivated.', $this->executeCommand(array(
             'server' => 'remote',
         )));
+    }
+
+    public function testOutputsAnErrorWhenTheConfigurationFileIsNotWritable() {
+        $originalConfigFile = file_get_contents(__DIR__ . '/../../config-files/config.yml');
+        $root = vfsStream::setup('config-file-dir');
+        $configFile = vfsStream::newFile('config.yml', 0400);
+        $configFile->setContent($originalConfigFile);
+        $root->addChild($configFile);
+
+        $output = $this->executeCommand(array(
+            'server' => 'local',
+            '--config' => $configFile->url(),
+        ));
+
+        $this->assertContains('An error occured. The configuration file was not updated.', $output);
+        $this->assertSame(file_get_contents($configFile->url()), $originalConfigFile, 'Config files differ. The virtual one should not have been changed');
+    }
+
+    public function testOutputsAMessageWhenTheConfigurationHasBeenUpdated() {
+        $originalConfigFile = file_get_contents(__DIR__ . '/../../config-files/config.yml');
+        $root = vfsStream::setup('config-file-dir');
+        $configFile = vfsStream::newFile('config.yml', 0655);
+        $configFile->setContent($originalConfigFile);
+        $root->addChild($configFile);
+
+        $output = $this->executeCommand(array(
+            'server' => 'local',
+            '--config' => $configFile->url(),
+        ));
+
+        $this->assertContains('The configuration file has been updated.', $output);
+        $this->assertContains('local: { url: \'http://imbo\', publicKey: user, privateKey: key, active: false }', file_get_contents($configFile->url()));
     }
 }
