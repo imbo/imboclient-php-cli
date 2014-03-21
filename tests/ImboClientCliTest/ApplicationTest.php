@@ -55,7 +55,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 
         foreach (array(
             'activate        Activate an imbo server',
-            'add-image       Add an image to imbo',
+            'add-images      Add one or more images to an Imbo server',
             'deactivate      Deactivate an imbo server',
             'delete-image    Delete an image from imbo',
             'list-servers    List configured servers',
