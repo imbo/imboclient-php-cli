@@ -19,7 +19,7 @@
     "imbo/imboclient": "dev-develop"
   },
   "require-dev": {
-    "phpunit/phpunit": "~3.0",
+    "phpunit/phpunit": "~4.0",
     "mikey179/vfsStream": "~1.2"
   },
   "support": {
