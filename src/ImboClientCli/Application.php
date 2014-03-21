@@ -31,7 +31,7 @@ class Application extends Console\Application {
         // Register commands
         $this->addCommands(array(
             new Command\Activate(),
-            new Command\AddImage(),
+            new Command\AddImages(),
             new Command\Deactivate(),
             new Command\DeleteImage(),
             new Command\ListServers(),
