@@ -9,10 +9,10 @@ source  = "#{basedir}/src/ImboClientCli"
 logs    = "#{build}/logs"
 
 desc "Task used by Jenkins-CI"
-task :jenkins => [:prepare, :lint, :installdep, :test, :apidocs, :cs_ci]
+task :jenkins => [:prepare, :lint, :test]
 
 desc "Default task"
-task :default => [:prepare, :lint, :installdep, :test, :apidocs, :cs]
+task :default => [:prepare, :lint, :test]
 
 desc "Clean up and create artifact directories"
 task :prepare do
@@ -52,27 +52,6 @@ task :lint do
   IO.write(lintCache, JSON.dump(sums))
 end
 
-desc "Install dependencies"
-task :installdep do
-  Rake::Task["install_composer"].invoke
-  system "php -d \"apc.enable_cli=0\" composer.phar install --dev"
-end
-
-desc "Update dependencies"
-task :updatedep do
-  Rake::Task["install_composer"].invoke
-  system "php -d \"apc.enable_cli=0\" composer.phar update --dev"
-end
-
-desc "Install/update composer itself"
-task :install_composer do
-  if File.exists?("composer.phar")
-    system "php -d \"apc.enable_cli=0\" composer.phar self-update"
-  else
-    system "curl -s http://getcomposer.org/installer | php -d \"apc.enable_cli=0\""
-  end
-end
-
 desc "Run tests"
 task :test do
   begin
@@ -80,11 +59,6 @@ task :test do
   rescue Exception
     exit 1
   end
-end
-
-desc "Generate API documentation"
-task :apidocs do
-  system "phpdoc -d #{source} -t #{build}/docs --title 'API documentation for ImboClientCli'"
 end
 
 desc "Check coding standard"
