@@ -72,7 +72,7 @@ class AddImages extends RemoteCommand {
                 if ($depth == 0) {
                     $depth = '== 0';
                 } else {
-                    $depth = '< ' . $depth;
+                    $depth = '<= ' . $depth;
                 }
 
                 $finder->depth($depth);
@@ -85,8 +85,9 @@ class AddImages extends RemoteCommand {
 
         $numImages = count($files);
         $question = sprintf(
-            '<question>You are about to add %d images to "%s". Continue? [yN]</question> ',
+            '<question>You are about to add %d image%s to "%s". Continue? [yN]</question> ',
             $numImages,
+            ($numImages !== 1 ? 's' : ''),
             $this->server['name']
         );
         $dialog = $this->getHelper('dialog');
@@ -117,7 +118,11 @@ class AddImages extends RemoteCommand {
         ));
 
         if ($num = count($notAdded)) {
-            $output->writeln(sprintf('<error>%d images was not added:</error>', $num));
+            $output->writeln(sprintf(
+                '<error>%d image%s was not added:</error>',
+                $num,
+                ($num === 1 ? '' : 's')
+            ));
             $output->write($notAdded, true);
         }
     }
