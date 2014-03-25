@@ -29,6 +29,8 @@ class DeleteImage extends RemoteCommand {
     public function __construct() {
         parent::__construct('delete-image');
 
+        $this->setAliases(array('delete'));
+
         $this->setDescription('Delete an image from imbo');
         $this->setHelp('Delete an image from one of the imbo servers defined in the configuration');
         $this->addArgument('imageIdentifier', InputArgument::REQUIRED, 'The identifier of the image to delete');
