@@ -37,6 +37,8 @@ class AddImages extends RemoteCommand {
     public function __construct() {
         parent::__construct('add-images');
 
+        $this->setAliases(array('add'));
+
         $this->setDescription('Add one or more images to an Imbo server');
         $this->setHelp('Add one or more images to one of the Imbo servers defined in the configuration');
 
