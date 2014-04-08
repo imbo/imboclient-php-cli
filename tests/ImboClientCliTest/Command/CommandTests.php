@@ -10,7 +10,6 @@
 
 namespace ImboClientCliTest\Command;
 
-
 use ImboClientCli\Command\Command,
     ImboClientCli\Application,
     ImboClient\ImboClient,

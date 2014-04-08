@@ -27,21 +27,6 @@ class AddImagesTest extends RemoteCommandTests {
     }
 
     /**
-     * Set up the finder property
-     */
-    public function setUp() {
-        parent::setUp();
-
-    }
-
-    /**
-     * Tear down the finder
-     */
-    public function tearDown() {
-        $this->finder = null;
-    }
-
-    /**
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage The specified path does not exist: /foo/bar
      */

@@ -27,6 +27,13 @@ use ImboClientCli\Version,
  */
 abstract class Command extends BaseCommand {
     /**
+     * Config file parser
+     *
+     * @var Parser
+     */
+    private $parser;
+
+    /**
      * Application configuration
      *
      * @var array
@@ -39,6 +46,28 @@ abstract class Command extends BaseCommand {
      * @var string
      */
     protected $configPath;
+
+    /**
+     * Set the config file parser
+     *
+     * @param Parser $parser
+     */
+    public function setParser(Parser $parser) {
+        $this->parser = $parser;
+    }
+
+    /**
+     * Get an instance of the config file parser
+     *
+     * @return Parser
+     */
+    protected function getParser() {
+        if ($this->parser === null) {
+            $this->parser = new Parser();
+        }
+
+        return $this->parser;
+    }
 
     /**
      * Set the configuration
@@ -109,10 +138,8 @@ abstract class Command extends BaseCommand {
 
         $this->configPath = $fullPath;
 
-        $parser = new Parser();
-
         try {
-            $this->configuration = $parser->parse(file_get_contents($this->configPath));
+            $this->configuration = $this->getParser()->parse(file_get_contents($this->configPath));
         } catch (ParseException $e) {
             throw new InvalidArgumentException(
                 'Invalid configuration file: ' . $this->configPath . ' (Parser message: ' . $e->getMessage() . ')'
