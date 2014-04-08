@@ -47,7 +47,7 @@ The client ships with an example configuration file (shown below) that you can u
     :language: yaml
     :linenos:
 
-The ``default`` key should point to the server definition that is to be used per default. If you need to execute a remote command (for instance adding / deleting images) from another server, specify the ``--server <server>`` option when executing the command. When a server definition is labeled as not active (``active: false``) you can not execute remote commands for that server. These flags can be changed manually by editing the configuration file, or by using the `activate <activate-command>` or `deactivate <deactivate-command>` commands in the client.
+The ``default`` key should point to the server definition that is to be used per default. If you need to execute a remote command (for instance adding / deleting images) from another server, specify the ``--server <server>`` option when executing the command. When a server definition is labeled as not active (``active: false``) you can not execute remote commands for that server. These flags can be changed manually by editing the configuration file, or by using the :ref:`activate <activate-command>` or :ref:`deactivate <deactivate-command>` commands in the client.
 
 Commands
 ++++++++
