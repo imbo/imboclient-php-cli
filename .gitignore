@@ -3,3 +3,4 @@ config.yml
 composer.phar
 vendor
 .lintcache
+docs/_build

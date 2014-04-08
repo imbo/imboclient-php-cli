@@ -24,6 +24,21 @@ task :prepare do
   end
 end
 
+desc "Spell check and generate end user docs"
+task :readthedocs do
+  wd = Dir.getwd
+  Dir.chdir("docs")
+  begin
+    sh %{make spelling}
+  rescue Exception
+    puts "Spelling error in the docs, aborting"
+    exit 1
+  end
+  puts "No spelling errors. Generate docs"
+  sh %{make html}
+  Dir.chdir(wd)
+end
+
 desc "Check syntax on all php files in the project"
 task :lint do
   lintCache = "#{basedir}/.lintcache"
