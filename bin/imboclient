@@ -12,7 +12,7 @@
 namespace ImboClientCli;
 
 // Autoloader
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 // Run the main application
 $application = new Application();
