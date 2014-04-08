@@ -12,7 +12,7 @@ desc "Task used by Jenkins-CI"
 task :jenkins => [:prepare, :lint, :test]
 
 desc "Default task"
-task :default => [:prepare, :lint, :test]
+task :default => [:prepare, :lint, :test, :readthedocs]
 
 desc "Clean up and create artifact directories"
 task :prepare do
