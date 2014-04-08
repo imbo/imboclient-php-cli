@@ -9,10 +9,10 @@ source  = "#{basedir}/src/ImboClientCli"
 logs    = "#{build}/logs"
 
 desc "Task used by Jenkins-CI"
-task :jenkins => [:prepare, :lint, :test]
+task :jenkins => [:prepare, :lint, :cs_ci, :test]
 
 desc "Default task"
-task :default => [:prepare, :lint, :test, :readthedocs]
+task :default => [:prepare, :lint, :cs, :test, :readthedocs]
 
 desc "Clean up and create artifact directories"
 task :prepare do
