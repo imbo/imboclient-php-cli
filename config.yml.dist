@@ -2,7 +2,7 @@
 #
 # Each server can have its own name (instead of server1, server2 and server3 as stated below).
 # Remember to update the default server if you change the server names. Servers can be disabled by
-# Changing the active state to "no". The client will refuse to run any operations against inactive
+# Changing the active state to false. The client will refuse to run any operations against inactive
 # servers.
 
 servers:
