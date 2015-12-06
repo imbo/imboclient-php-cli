@@ -54,13 +54,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
         $display = $this->application->getDisplay();
 
         foreach (array(
-            'activate        Activate an imbo server',
-            'add-images      Add one or more images to an Imbo server',
-            'deactivate      Deactivate an imbo server',
-            'delete-image    Delete an image from imbo',
-            'list-servers    List configured servers',
-            'num-images      Get the number of images on an imbo server',
-            'server-status   Check server status',
+            'activate       Activate an imbo server',
+            'add-images     Add one or more images to an Imbo server',
+            'deactivate     Deactivate an imbo server',
+            'delete-image   Delete an image from imbo',
+            'list-servers   List configured servers',
+            'num-images     Get the number of images on an imbo server',
+            'server-status  Check server status',
         ) as $command) {
             $this->assertContains($command, $display);
         }

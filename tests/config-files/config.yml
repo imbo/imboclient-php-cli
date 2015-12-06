@@ -9,6 +9,7 @@ servers:
 
     remote:
         url: http://imbo-remote
-        publicKey: remoteuser
+        user: remoteuser
+        publicKey: remotepub
         privateKey: otherkey
         active: false

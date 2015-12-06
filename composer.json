@@ -16,7 +16,7 @@
     "php": ">=5.4",
     "symfony/console": "~2.0",
     "symfony/finder": "~2.0",
-    "imbo/imboclient": "~1.2"
+    "imbo/imboclient": "~2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",

@@ -9,18 +9,21 @@ servers:
     default: server1
     server1:
         url: http://imbo1.example.com
+        user: user
         publicKey: public key
         privateKey: private key
         active: true
 
     server2:
         url: http://imbo2.example.com
+        user: user
         publicKey: public key
         privateKey: private key
         active: true
 
     server3:
         url: http://imbo3.example.com
+        user: user
         publicKey: public key
         privateKey: private key
         active: false

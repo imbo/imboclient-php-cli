@@ -47,11 +47,14 @@ class ListServers extends Command {
                 continue;
             }
 
+            $user = isset($config['user']) ? $config['user'] : $config['publicKey'];
+
             // Prepare output
             $result = array(
                 'Name: ' . $server . ($server == $default ? ' (default)' : ''),
                 'URL: ' . $config['url'],
                 'Active: ' . ($config['active'] ? 'yes' : 'no'),
+                'User: ' . $user,
                 'Public key: ' . $config['publicKey'],
             );
 

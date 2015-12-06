@@ -39,6 +39,7 @@ class NumImages extends RemoteCommand {
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
         $num = $this->getClient()->getNumImages();
-        $output->writeln('<info>' . $this->server['publicKey'] . '</info> has <info>' . $num . '</info> image' . ($num !== 1 ? 's' : '') . '.');
+        $user = isset($this->server['user']) ? $this->server['user'] : $this->server['publicKey'];
+        $output->writeln('<info>' . $user . '</info> has <info>' . $num . '</info> image' . ($num !== 1 ? 's' : '') . '.');
     }
 }
