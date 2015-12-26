@@ -67,6 +67,6 @@ class ActivateTest extends CommandTests {
         ));
 
         $this->assertContains('The configuration file has been updated.', $output);
-        $this->assertContains('remote: { url: \'http://imbo-remote\', publicKey: remoteuser, privateKey: otherkey, active: true }', file_get_contents($configFile->url()));
+        $this->assertContains('remote: { url: \'http://imbo-remote\', user: remoteuser, publicKey: remotepub, privateKey: otherkey, active: true }', file_get_contents($configFile->url()));
     }
 }

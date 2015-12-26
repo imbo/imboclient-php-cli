@@ -32,12 +32,14 @@ class ListServersTest extends CommandTests {
 Name: local (default)
 URL: http://imbo
 Active: yes
+User: user
 Public key: user
 
 Name: remote
 URL: http://imbo-remote
 Active: no
-Public key: remoteuser
+User: remoteuser
+Public key: remotepub
 SERVERS;
 
         $this->assertContains($expected, $this->executeCommand());
@@ -48,13 +50,15 @@ SERVERS;
 Name: local (default)
 URL: http://imbo
 Active: yes
+User: user
 Public key: user
 Private key: key
 
 Name: remote
 URL: http://imbo-remote
 Active: no
-Public key: remoteuser
+User: remoteuser
+Public key: remotepub
 Private key: otherkey
 SERVERS;
 

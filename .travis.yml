@@ -13,5 +13,5 @@ branches:
     - develop
 script:
   - composer self-update
-  - composer --no-ansi install --dev
+  - composer --no-ansi install
   - ./vendor/bin/phpunit --verbose -c tests/phpunit.xml.travis

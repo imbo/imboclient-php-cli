@@ -29,8 +29,9 @@ abstract class RemoteCommand extends Command {
      * Elements included in this array are:
      *
      * (string) url The URL to the server
-     * (string) publicKey The public key of the user performing the command
-     * (string) privateKey The private key of the user performing the command
+     * (string) user The user on which to perform the command
+     * (string) publicKey The public key to use when performing the command
+     * (string) privateKey The private key to use when performing the command
      * (boolean) active Whether or not the server is activated in the configuration
      * (string) name The name of the server in the configuration
      *
@@ -102,10 +103,13 @@ abstract class RemoteCommand extends Command {
      *
      * @return ImboClient
      */
-    public function getclient() {
+    public function getClient() {
         if ($this->client === null) {
+            $user = isset($this->server['user']) ? $this->server['user'] : $this->server['publicKey'];
+            
             $this->setClient(ImboClient::factory(array(
                 'serverUrls' => array($this->server['url']),
+                'user' => $user,
                 'publicKey' => $this->server['publicKey'],
                 'privateKey' => $this->server['privateKey'],
             )));
