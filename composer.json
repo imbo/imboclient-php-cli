@@ -34,5 +34,8 @@
   },
   "bin": [
     "bin/imboclient"
-  ]
+  ],
+  "platform": {
+    "php": "5.4"
+  }
 }
