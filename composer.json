@@ -14,6 +14,7 @@
   ],
   "require": {
     "php": ">=5.4",
+    "symfony/yaml": "~2.1",
     "symfony/console": "~2.0",
     "symfony/finder": "~2.0",
     "imbo/imboclient": "~2.0"
@@ -34,8 +35,5 @@
   },
   "bin": [
     "bin/imboclient"
-  ],
-  "platform": {
-    "php": "5.4"
-  }
+  ]
 }
